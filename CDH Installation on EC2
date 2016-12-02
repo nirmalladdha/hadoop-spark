@@ -1,0 +1,41 @@
+1) Assuming that you have an AWS account.
+2) Using launch instance wizard, under AWS marketplace search for "Ubuntu 12.04" and select "Ubuntu Server 12.04 LTS" operating system, because CDH is compatible with ubuntu 12.04
+(Kindly note that this is not production setup installation, instead ojective it is to installed Apache Hadoop Cluster using CDH )
+  2.1) Select Instance Type as m1.large or m3.large, the reason is CDH manager will be downloaded and install on this machine, additionally Name-Node, Job Tracker will also be installed 
+on this server. As these are master processes as well as memory hungry hence it is appropriate to select large instance.
+
+  2.2) Click "Next : configure details" - go with default setting & no changes required here,
+  2.3) Click "Add storage" - Do not add EBS storage instead use instance storage. As Jobs on Hadoop involves high number of IO operations and EBS storage would attract more cost.
+    Configure appropriate size of Root and you can also add instance store with required size. (I have selected 40GB for root and no additional volumes)
+  2.4) Click "Next : Add Tags" : provide appropriate name (e.g. "hadoop-master") as we will be installing master processes on this machine.
+  2.5) Click "Next : Configure Security Groups" : here need to ensure that all ports required by CDH manager are opened. See the list under following link. 
+      http://www.cloudera.com/documentation/manager/5-1-x/Cloudera-Manager-Installation-Guide/cm5ig_ports_cdh5.html
+  2.6) Click "Review & Launch" , don't forget to download private-key, as the key is required to connect to server using SSH terminal + CDH installation.
+ 3) Connect the instance using SSH - use public DNS of the EC2 instance (it is available in AWS dashboard), provide private key for authentication. (You can use putty as SSH client from your machine to connect to EC2 instance)
+ $ ssh -i private-key-file ubuntu@ec2-xx-xx-xx-xx.compute-1.amazonaws.com
+ 
+ 4) update package (as a precausion)
+ $ sudo apt-get update
+ 5) Download the Cloudera Manager installer:
+ $ wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
+ 6) Execute installer
+ $ sudo su
+ $ chmod +x cloudera-manager-installer.bin
+ $ ./cloudera-manager-installer.bin
+ click - Next -> Next -> Accept License -> Next -> Accept Oracle License -> Starts installation -> ok-> ok->installation complete
+ 
+ 7) Using EC2 instance's public DNS open  web console in browser using following link and login with default username/password = "admin"
+ http://ec2-xx-xx-xx-xx.compute-1.amazonaws.com:7180
+ 
+ 8)
+   8.1) Accept license -> Continue
+   8.2) Select "Cloudera Enterprise Data Hub Edition Trial" -> Continue -> Continue
+   8.3) Specify hosts for your CDH cluster installation - click search
+   
+ 
+ 
+ 
+ 
+  
+  
+  
